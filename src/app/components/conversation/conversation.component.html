@@ -1,0 +1,51 @@
+<div class="chat-container">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <button class="new-chat" (click)="startNewConversation()">
+      <i class="fas fa-plus"></i>
+      New Chat
+    </button>
+    
+    <div class="conversations-list">
+      <div 
+        *ngFor="let conv of conversations" 
+        class="conversation-item"
+        [class.active]="conv.id === currentConversation?.id"
+        (click)="selectConversation(conv)"
+      >
+        <i class="fas fa-message"></i>
+        <span>Conversation {{ conv.id }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Chat Area -->
+  <div class="main-chat">
+    <div class="messages-container">
+      <div *ngFor="let message of messages" class="message" [class.ai]="!message.query">
+        <div class="message-content">
+          <div class="avatar">
+            <i [class]="message.query ? 'fas fa-user' : 'fas fa-robot'"></i>
+          </div>
+          <div class="text">
+            <p>{{ message.query || message.response }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-container">
+      <textarea 
+        [(ngModel)]="newMessage"
+        placeholder="Type a message..."
+        (keydown.enter)="$event.preventDefault(); sendMessage()"
+      ></textarea>
+      <button 
+        (click)="sendMessage()" 
+        [disabled]="!newMessage.trim() || loading"
+      >
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+</div>
