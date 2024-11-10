@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ChatService } from '../../bunisess/services/chat.service';
+import { AuthService } from '../../bunisess/services/auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -12,28 +12,33 @@ import { ChatService } from '../../bunisess/services/chat.service';
 export class AuthComponent {
   loginForm: FormGroup;
   errorMessage: string = '';
+  loading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
-    private chatService: ChatService,
+    private authService: AuthService,
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]]
     });
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      this.chatService.createUser(this.loginForm.value).subscribe({
-        next: (user) => {
-          localStorage.setItem('currentUser', JSON.stringify(user));
+    if (this.loginForm.valid && !this.loading) {
+      this.loading = true;
+      this.errorMessage = '';
+      const { email, name } = this.loginForm.value;
+      
+      this.authService.login(email, name).subscribe({
+        next: () => {
           this.router.navigate(['/conversation']);
         },
         error: (error) => {
-          this.errorMessage = 'Error creating user. Please try again.';
-          console.error('Error:', error);
+          console.error('Login error:', error);
+          this.errorMessage = 'Error al iniciar sesión. Por favor, intente nuevamente.';
+          this.loading = false;
         }
       });
     }

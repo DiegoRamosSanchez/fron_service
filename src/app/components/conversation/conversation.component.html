@@ -1,14 +1,14 @@
 <div class="chat-container">
   <!-- Sidebar -->
   <div class="sidebar">
-    <button class="new-chat" (click)="startNewConversation()">
-      <i class="fas fa-plus"></i>
+    <button class="new-chat" (click)="startNewConversation()" [disabled]="loading">
+      <i class="fas" [class.fa-plus]="!loading" [class.fa-spinner]="loading" [class.fa-spin]="loading"></i>
       New Chat
     </button>
-    
+
     <div class="conversations-list">
-      <div 
-        *ngFor="let conv of conversations" 
+      <div
+        *ngFor="let conv of conversations"
         class="conversation-item"
         [class.active]="conv.id === currentConversation?.id"
         (click)="selectConversation(conv)"
@@ -17,11 +17,25 @@
         <span>Conversation {{ conv.id }}</span>
       </div>
     </div>
+
+    <button class="logout-btn" (click)="logout()">
+      <i class="fas fa-sign-out-alt"></i>
+      Logout
+    </button>
   </div>
 
   <!-- Main Chat Area -->
   <div class="main-chat">
     <div class="messages-container">
+      <div *ngIf="error" class="error-banner" (click)="clearError()">
+        {{ error }}
+      </div>
+      
+      <div *ngIf="loading && !messages.length" class="loading-messages">
+        <i class="fas fa-spinner fa-spin"></i>
+        Loading messages...
+      </div>
+
       <div *ngFor="let message of messages" class="message" [class.ai]="!message.query">
         <div class="message-content">
           <div class="avatar">
@@ -35,16 +49,17 @@
     </div>
 
     <div class="input-container">
-      <textarea 
+      <textarea
         [(ngModel)]="newMessage"
         placeholder="Type a message..."
         (keydown.enter)="$event.preventDefault(); sendMessage()"
+        [disabled]="loading"
       ></textarea>
-      <button 
-        (click)="sendMessage()" 
+      <button
+        (click)="sendMessage()"
         [disabled]="!newMessage.trim() || loading"
       >
-        <i class="fas fa-paper-plane"></i>
+        <i class="fas" [class.fa-paper-plane]="!loading" [class.fa-spinner]="loading" [class.fa-spin]="loading"></i>
       </button>
     </div>
   </div>

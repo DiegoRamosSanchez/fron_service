@@ -32,7 +32,7 @@ export interface Message {
 })
 
 export class ChatService {
-  private apiUrl = '/api/chat';
+  private apiUrl = 'https://musical-space-winner-5gx4qp46q9gwc7x4x-8080.app.github.dev/api/chat';
 
   constructor(private http: HttpClient) {}
 
