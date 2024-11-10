@@ -35,14 +35,17 @@ export class AuthService {
         const existingUser = users.find(u => u.email === email);
         
         if (existingUser) {
+          this.currentUserSubject.next(existingUser);
+          localStorage.setItem('currentUser', JSON.stringify(existingUser));
           return of(existingUser);
         } else {
-          return this.http.post<User>(`${this.apiUrl}/users`, { name, email });
+          return this.http.post<User>(`${this.apiUrl}/users`, { name, email }).pipe(
+            tap(user => {
+              localStorage.setItem('currentUser', JSON.stringify(user));
+              this.currentUserSubject.next(user);
+            })
+          );
         }
-      }),
-      tap(user => {
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        this.currentUserSubject.next(user);
       }),
       catchError(error => {
         console.error('Error en autenticación:', error);

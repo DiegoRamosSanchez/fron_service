@@ -30,7 +30,6 @@ export interface Message {
 @Injectable({
   providedIn: 'root'
 })
-
 export class ChatService {
   private apiUrl = 'https://musical-space-winner-5gx4qp46q9gwc7x4x-8080.app.github.dev/api/chat';
 
@@ -45,6 +44,11 @@ export class ChatService {
     return this.http.get<any[]>(`${this.apiUrl}/users`);
   }
 
+  // Método para obtener todas las conversaciones de un usuario específico
+  getUserConversations(userId: number): Observable<Conversation[]> {
+    return this.http.get<Conversation[]>(`${this.apiUrl}/users/${userId}/conversations`);
+  }
+
   // Conversation endpoints
   startConversation(userId: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/conversations/${userId}`, {});
@@ -52,10 +56,6 @@ export class ChatService {
 
   endConversation(conversationId: number): Observable<any> {
     return this.http.put(`${this.apiUrl}/conversations/${conversationId}/end`, {});
-  }
-
-  getConversations(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/conversations`);
   }
 
   // Message endpoints

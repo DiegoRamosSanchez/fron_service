@@ -18,7 +18,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/conversation',
+    redirectTo: '/auth',
     pathMatch: 'full'
   }
 ];

@@ -30,19 +30,26 @@
       <div *ngIf="error" class="error-banner" (click)="clearError()">
         {{ error }}
       </div>
-      
+
       <div *ngIf="loading && !messages.length" class="loading-messages">
         <i class="fas fa-spinner fa-spin"></i>
         Loading messages...
       </div>
 
-      <div *ngFor="let message of messages" class="message" [class.ai]="!message.query">
-        <div class="message-content">
-          <div class="avatar">
-            <i [class]="message.query ? 'fas fa-user' : 'fas fa-robot'"></i>
+      <div *ngFor="let message of messages" class="message">
+        <!-- Mensaje del usuario -->
+        <div class="user-message" *ngIf="message.query">
+          <div class="message-content">
+            <i class="fas fa-user"></i> <!-- Ícono de usuario -->
+            <span>{{ message.query }}</span> <!-- Mensaje enviado por el usuario -->
           </div>
-          <div class="text">
-            <p>{{ message.query || message.response }}</p>
+        </div>
+
+        <!-- Mensaje del bot -->
+        <div class="bot-message" *ngIf="message.response">
+          <div class="message-content">
+            <i class="fas fa-robot"></i> <!-- Ícono del bot -->
+            <span>{{ message.response }}</span> <!-- Respuesta del bot -->
           </div>
         </div>
       </div>
