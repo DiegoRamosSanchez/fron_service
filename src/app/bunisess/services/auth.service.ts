@@ -10,7 +10,7 @@ import { User } from './chat.service';
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
-  private apiUrl = 'https://musical-space-winner-5gx4qp46q9gwc7x4x-8080.app.github.dev/api/chat';
+  private apiUrl = 'https://supreme-system-pjpgrqgvr49639wrp-8080.app.github.dev/api/chat';
 
   constructor(private http: HttpClient) {
     this.loadStoredUser();

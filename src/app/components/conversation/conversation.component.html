@@ -37,19 +37,17 @@
       </div>
 
       <div *ngFor="let message of messages" class="message">
-        <!-- Mensaje del usuario -->
         <div class="user-message" *ngIf="message.query">
           <div class="message-content">
-            <i class="fas fa-user"></i> <!-- Ícono de usuario -->
-            <span>{{ message.query }}</span> <!-- Mensaje enviado por el usuario -->
+            <i class="fas fa-user"></i>
+            <span>{{ message.query }}</span>
           </div>
         </div>
 
-        <!-- Mensaje del bot -->
         <div class="bot-message" *ngIf="message.response">
           <div class="message-content">
-            <i class="fas fa-robot"></i> <!-- Ícono del bot -->
-            <span>{{ message.response }}</span> <!-- Respuesta del bot -->
+            <i class="fas fa-robot"></i>
+            <span>{{ message.response }}</span>
           </div>
         </div>
       </div>

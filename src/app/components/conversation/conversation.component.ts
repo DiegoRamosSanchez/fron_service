@@ -149,7 +149,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
   clearError() {
     this.error = ''; // Limpia el mensaje de error
   }
-
+  
   logout() {
     this.authService.logout(); // Asegúrate de que el método logout esté definido en AuthService
     this.router.navigate(['/auth']); // Redirige a la página de autenticación
