@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { User } from './chat.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { User } from './chat.service';
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
-  private apiUrl = 'https://supreme-system-pjpgrqgvr49639wrp-8080.app.github.dev/api/chat';
+  private apiUrl = environment.apiUrl + '/api/chat';
 
   constructor(private http: HttpClient) {
     this.loadStoredUser();

@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Messages } from '../models/message.model';
 import { Conversation } from './chat.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class ConversationService {
-  private apiUrl = 'http://localhost:8080/api/chat'; // Cambia esto según tu configuración
+  private apiUrl = environment.apiUrl + '/api/chat'; // Cambia esto según tu configuración
 
   constructor(private http: HttpClient) {}
 

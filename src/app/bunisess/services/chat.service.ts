@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface User {
   id?: number;
@@ -11,6 +12,7 @@ export interface User {
 }
 
 export interface Conversation {
+title: any;
   id?: number;
   userId: number;
   startTime?: Date;
@@ -31,7 +33,7 @@ export interface Message {
   providedIn: 'root'
 })
 export class ChatService {
-  private apiUrl = 'https://supreme-system-pjpgrqgvr49639wrp-8080.app.github.dev/api/chat';
+  private apiUrl = environment.apiUrl + '/api/chat';
 
   constructor(private http: HttpClient) {}
 

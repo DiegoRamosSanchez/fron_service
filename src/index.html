@@ -2,18 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Chats Bots</title>
+  <title>Chat Bots - Your AI Companion</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#667eea">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <!-- Bootstrap CSS -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="https://unpkg.com/basscss@8.0.2/css/basscss.min.css" rel="stylesheet">
+
+  <!-- Google Fonts (opcional) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="mat-typography">
+<body class="m-0 p-0 font-[Inter], sans-serif">
+
+  <!-- Loading Screen -->
+  <div id="app-loading" class="fixed inset-0 flex flex-col justify-center items-center bg-gradient-to-br from-indigo-500 to-purple-600 z-[9999] transition-opacity duration-500">
+    <div class="w-[70px] h-[70px] bg-white rounded-2xl flex items-center justify-center mb-6 animate-pulse">
+      <!-- Simple Chat Icon (Tailwind-compatible SVG) -->
+      <svg class="w-8 h-8 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M18 13a1 1 0 01-1 1H6l-4 4V4a1 1 0 011-1h14a1 1 0 011 1v9z"/>
+      </svg>
+    </div>
+    <div class="w-12 h-12 border-[5px] border-white border-t-transparent rounded-full animate-spin"></div>
+    <p class="mt-4 text-white font-medium text-lg">Loading...</p>
+  </div>
+
+  <!-- Angular App -->
   <app-root></app-root>
+
+  <script>
+    // Hide loading screen when Angular app is ready
+    window.addEventListener('load', () => {
+      const loading = document.getElementById('app-loading');
+      const checkApp = setInterval(() => {
+        const appRoot = document.querySelector('app-root');
+        if (appRoot && appRoot.children.length > 0) {
+          loading.style.opacity = '0';
+          setTimeout(() => loading.style.display = 'none', 500);
+          clearInterval(checkApp);
+        }
+      }, 100);
+      setTimeout(() => {
+        loading.style.opacity = '0';
+        setTimeout(() => loading.style.display = 'none', 500);
+        clearInterval(checkApp);
+      }, 3000);
+    });
+  </script>
 </body>
 </html>

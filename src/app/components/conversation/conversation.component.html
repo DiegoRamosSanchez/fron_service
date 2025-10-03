@@ -1,71 +1,146 @@
-<div class="chat-container">
+<div class="flex h-screen bg-mainBg text-gray-100 overflow-hidden">
   <!-- Sidebar -->
-  <div class="sidebar">
-    <button class="new-chat" (click)="startNewConversation()" [disabled]="loading">
-      <i class="fas" [class.fa-plus]="!loading" [class.fa-spinner]="loading" [class.fa-spin]="loading"></i>
-      New Chat
-    </button>
-
-    <div class="conversations-list">
-      <div
-        *ngFor="let conv of conversations"
-        class="conversation-item"
-        [class.active]="conv.id === currentConversation?.id"
-        (click)="selectConversation(conv)"
+  <aside class="w-64 bg-sidebarBg flex flex-col border-r border-gray-700">
+    <!-- Header del Sidebar -->
+    <div class="px-4 py-5 border-b border-gray-700 flex items-center justify-between">
+      <h2 class="text-lg font-semibold text-white">Chats</h2>
+      <button
+        (click)="logout()"
+        class="text-gray-400 hover:text-white transition"
+        title="Logout"
       >
-        <i class="fas fa-message"></i>
-        <span>Conversation {{ conv.id }}</span>
-      </div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7" />
+        </svg>
+      </button>
     </div>
 
-    <button class="logout-btn" (click)="logout()">
-      <i class="fas fa-sign-out-alt"></i>
-      Logout
-    </button>
-  </div>
+    <!-- Botón New Chat -->
+    <div class="px-4 py-3 border-b border-gray-700">
+      <button
+        (click)="startNewConversation()"
+        [disabled]="loading"
+        class="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium py-2 px-3 rounded-md transition disabled:opacity-50"
+      >
+        <svg *ngIf="!loading" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 4v16m8-8H4" />
+        </svg>
+        <svg *ngIf="loading" class="h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke-width="4"></circle>
+          <path class="opacity-75" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 01-8 8z"></path>
+        </svg>
+        New Chat
+      </button>
+    </div>
 
-  <!-- Main Chat Area -->
-  <div class="main-chat">
-    <div class="messages-container">
-      <div *ngIf="error" class="error-banner" (click)="clearError()">
+    <!-- Lista de conversaciones -->
+    <nav class="flex-1 overflow-y-auto">
+      <ul class="divide-y divide-gray-700">
+        <li *ngFor="let conv of conversations"
+            (click)="selectConversation(conv)"
+            class="cursor-pointer"
+            [ngClass]="{
+              'bg-gray-700 text-indigo-300 font-semibold': conv.id === currentConversation?.id,
+              'hover:bg-gray-800 text-gray-300': conv.id !== currentConversation?.id
+            }">
+          <div class="px-4 py-3 flex items-center gap-2">
+            <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 10h.01M12 10h.01M16 10h.01M9 16h6m2 4H7a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v12a2 2 0 01-2 2z" />
+            </svg>
+            <span>Conversation {{ conv.id }}</span>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Chat -->
+  <main class="flex-1 flex flex-col">
+    <!-- Header principal -->
+    <header class="bg-sidebarBg px-6 py-4 border-b border-gray-700 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="bg-indigo-600 text-white rounded-full h-10 w-10 flex items-center justify-center text-lg font-bold">AI</div>
+        <h1 class="text-xl font-semibold text-white">Gemini Chat</h1>
+      </div>
+      <div class="text-sm text-gray-400">v1.0</div>
+    </header>
+
+    <!-- Messages -->
+    <div class="flex-1 p-6 overflow-y-auto space-y-4">
+      <div *ngIf="error" class="bg-red-200 text-red-900 px-4 py-3 rounded cursor-pointer"
+           (click)="clearError()">
         {{ error }}
       </div>
 
-      <div *ngIf="loading && !messages.length" class="loading-messages">
-        <i class="fas fa-spinner fa-spin"></i>
-        Loading messages...
+      <div *ngIf="loading && !messages.length" class="flex items-center space-x-2 text-gray-300">
+        <svg class="h-6 w-6 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke-width="4"></circle>
+          <path class="opacity-75" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 01-8 8z"></path>
+        </svg>
+        <span>Loading messages...</span>
       </div>
 
-      <div *ngFor="let message of messages" class="message">
-        <div class="user-message" *ngIf="message.query">
-          <div class="message-content">
-            <i class="fas fa-user"></i>
-            <span>{{ message.query }}</span>
+      <div *ngFor="let message of messages" class="w-full animate-fade-in-up">
+        <!-- user message -->
+        <div *ngIf="message.query" class="flex justify-end">
+          <div class="max-w-xl bg-green-100 text-gray-900 px-5 py-3 rounded-2xl shadow-md">
+            <div class="flex items-start gap-2">
+              <svg class="h-5 w-5 text-green-500 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="whitespace-pre-wrap">{{ message.query }}</span>
+            </div>
           </div>
         </div>
 
-        <div class="bot-message" *ngIf="message.response">
-          <div class="message-content">
-            <i class="fas fa-robot"></i>
-            <span>{{ message.response }}</span>
+        <!-- bot message -->
+        <div *ngIf="message.response" class="flex justify-start">
+          <div class="max-w-xl bg-gray-700 text-gray-100 px-5 py-3 rounded-2xl shadow-md">
+            <div class="flex items-start gap-2">
+              <svg class="h-5 w-5 text-indigo-300 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 11c0 1.657-1.343 3-3 3v2a5 5 0 005-5h-2zM9 8V7a3 3 0 016 0v1a3 3 0 01-6 0z" />
+              </svg>
+              <span class="whitespace-pre-wrap">{{ message.response }}</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="input-container">
-      <textarea
-        [(ngModel)]="newMessage"
-        placeholder="Type a message..."
-        (keydown.enter)="$event.preventDefault(); sendMessage()"
-        [disabled]="loading"
-      ></textarea>
-      <button
-        (click)="sendMessage()"
-        [disabled]="!newMessage.trim() || loading"
-      >
-        <i class="fas" [class.fa-paper-plane]="!loading" [class.fa-spinner]="loading" [class.fa-spin]="loading"></i>
-      </button>
-    </div>
-  </div>
+    <!-- Input -->
+    <footer class="bg-sidebarBg border-t border-gray-700 px-6 py-4">
+      <div class="flex items-center gap-3">
+        <textarea
+          [(ngModel)]="newMessage"
+          placeholder="Type your message..."
+          (keydown.enter)="$event.preventDefault(); sendMessage()"
+          [disabled]="loading"
+          rows="1"
+          class="flex-1 resize-none bg-gray-700 text-gray-200 placeholder-gray-400 px-4 py-2 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        ></textarea>
+        <button
+          (click)="sendMessage()"
+          [disabled]="!newMessage.trim() || loading"
+          class="p-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full shadow transition disabled:opacity-50"
+        >
+          <svg *ngIf="!loading" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M14.752 11.168l-3.197-2.132a1 1 0 00-1.555.832v4.264a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+          </svg>
+          <svg *ngIf="loading" class="h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <circle cx="12" cy="12" r="10" stroke-width="4" class="opacity-25"></circle>
+            <path d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 01-8 8z" class="opacity-75"></path>
+          </svg>
+        </button>
+      </div>
+    </footer>
+  </main>
 </div>
