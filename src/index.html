@@ -2,34 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Chat Bots - Your AI Companion</title>
+  <title>ChatBot AI - Your Intelligent Assistant</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#667eea">
+  <meta name="theme-color" content="#0a0a0a">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-  <!-- Google Fonts (opcional) -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts - Inter para mejor legibilidad -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body class="m-0 p-0 font-[Inter], sans-serif">
+<body class="m-0 p-0 font-[Inter,system-ui,-apple-system,sans-serif] antialiased bg-zinc-950">
 
   <!-- Loading Screen -->
-  <div id="app-loading" class="fixed inset-0 flex flex-col justify-center items-center bg-gradient-to-br from-indigo-500 to-purple-600 z-[9999] transition-opacity duration-500">
-    <div class="w-[70px] h-[70px] bg-white rounded-2xl flex items-center justify-center mb-6 animate-pulse">
-      <!-- Simple Chat Icon (Tailwind-compatible SVG) -->
-      <svg class="w-8 h-8 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M18 13a1 1 0 01-1 1H6l-4 4V4a1 1 0 011-1h14a1 1 0 011 1v9z"/>
-      </svg>
+  <div id="app-loading" class="fixed inset-0 flex flex-col justify-center items-center bg-gradient-to-br from-zinc-950 via-zinc-900 to-black z-[9999] transition-opacity duration-500">
+    <!-- Animated Background -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-blue-600/10 to-purple-600/10 rounded-full blur-3xl animate-pulse"></div>
+      <div class="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
     </div>
-    <div class="w-12 h-12 border-[5px] border-white border-t-transparent rounded-full animate-spin"></div>
-    <p class="mt-4 text-white font-medium text-lg">Loading...</p>
+
+    <!-- Logo Container -->
+    <div class="relative mb-8 z-10">
+      <div class="w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 backdrop-blur-sm rounded-3xl flex items-center justify-center shadow-2xl shadow-blue-500/30 animate-bounce">
+        <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
+          <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
+        </svg>
+      </div>
+      <!-- Glow effect -->
+      <div class="absolute inset-0 w-20 h-20 bg-blue-600/30 rounded-3xl blur-xl animate-pulse"></div>
+    </div>
+
+    <!-- Spinner -->
+    <div class="relative z-10">
+      <div class="w-14 h-14 border-4 border-zinc-800 border-t-blue-600 rounded-full animate-spin"></div>
+    </div>
+
+    <!-- Loading Text -->
+    <div class="mt-6 text-center z-10">
+      <p class="text-white font-semibold text-xl tracking-wide">Loading ChatBot AI</p>
+      <p class="text-gray-400 text-sm mt-2">Preparing your experience...</p>
+    </div>
+
+    <!-- Loading Dots Animation -->
+    <div class="flex gap-2 mt-4 z-10">
+      <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+      <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
+      <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+    </div>
   </div>
 
   <!-- Angular App -->
   <app-root></app-root>
 
   <script>
-    // Hide loading screen when Angular app is ready
     window.addEventListener('load', () => {
       const loading = document.getElementById('app-loading');
       const checkApp = setInterval(() => {

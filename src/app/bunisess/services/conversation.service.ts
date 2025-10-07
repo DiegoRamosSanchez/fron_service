@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Messages } from '../models/message.model';
-import { Conversation } from './chat.service';
 import { environment } from '../../../environments/environment';
+import { Conversation } from '../models/conversations.model';
+import { Message } from '../models/message.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,11 +26,11 @@ export class ConversationService {
     return this.http.get<Conversation[]>(`${this.apiUrl}/conversations?userId=${userId}`);
   }
 
-  sendMessage(conversationId: number, message: Messages): Observable<Messages> {
-    return this.http.post<Messages>(`${this.apiUrl}/conversations/${conversationId}/messages`, { query: message.query });
+  sendMessage(conversationId: number, message: Message): Observable<Message> {
+    return this.http.post<Message>(`${this.apiUrl}/conversations/${conversationId}/messages`, { query: message.query });
   }
 
-  getMessagesByConversationId(conversationId: number): Observable<Messages[]> {
-    return this.http.get<Messages[]>(`${this.apiUrl}/conversations/${conversationId}/messages`);
+  getMessagesByConversationId(conversationId: number): Observable<Message[]> {
+    return this.http.get<Message[]>(`${this.apiUrl}/conversations/${conversationId}/messages`);
   }
 }

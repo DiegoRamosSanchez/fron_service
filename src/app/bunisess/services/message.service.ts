@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Messages } from '../models/message.model';
 import { environment } from '../../../environments/environment';
+import { Message } from '../models/message.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +13,11 @@ export class MessageService {
 
   constructor(private http: HttpClient) {}
 
-  sendMessage(conversationId: number, query: string): Observable<Messages> {
-    return this.http.post<Messages>(`${this.apiUrl}/conversations/${conversationId}/messages`, { query });
+  sendMessage(conversationId: number, query: string): Observable<Message> {
+    return this.http.post<Message>(`${this.apiUrl}/conversations/${conversationId}/messages`, { query });
   }
 
-  getConversationHistory(conversationId: number): Observable<Messages[]> {
-    return this.http.get<Messages[]>(`${this.apiUrl}/conversations/${conversationId}/messages`);
+  getConversationHistory(conversationId: number): Observable<Message[]> {
+    return this.http.get<Message[]>(`${this.apiUrl}/conversations/${conversationId}/messages`);
   }
 }
