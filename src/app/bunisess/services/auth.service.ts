@@ -11,7 +11,7 @@ import { User } from '../models/models';
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
-  private apiUrl = environment.apiUrl + '/api/chat';
+  private apiUrl = environment.apiUrl + '/api';
 
   constructor(private http: HttpClient) {
     this.loadStoredUser();
