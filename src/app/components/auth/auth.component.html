@@ -5,7 +5,7 @@
     <div class="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
   </div>
 
-  <!-- Login Card -->
+  <!-- Auth Card -->
   <div class="relative z-10 w-full max-w-md">
     <div class="bg-zinc-900/80 backdrop-blur-xl rounded-3xl p-8 sm:p-10 shadow-2xl border border-zinc-800">
       <!-- Logo & Header -->
@@ -16,14 +16,18 @@
             <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
           </svg>
         </div>
-        <h1 class="text-2xl sm:text-3xl font-bold text-white mb-2">Welcome Back</h1>
-        <p class="text-sm sm:text-base text-gray-400">Sign in to continue your conversation</p>
+        <h1 class="text-2xl sm:text-3xl font-bold text-white mb-2">
+          {{ isLoginMode ? 'Welcome Back' : 'Create Account' }}
+        </h1>
+        <p class="text-sm sm:text-base text-gray-400">
+          {{ isLoginMode ? 'Sign in to continue your conversation' : 'Join us and start chatting' }}
+        </p>
       </div>
 
       <!-- Form -->
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate class="space-y-5">
-        <!-- Name Input -->
-        <div>
+        <!-- Name Input (Solo en modo registro) -->
+        <div *ngIf="!isLoginMode">
           <label for="name" class="block text-sm font-semibold text-gray-300 mb-2">
             Full Name
           </label>
@@ -46,14 +50,12 @@
                 'border-red-500 bg-red-500/10 focus:border-red-500 focus:ring-2 focus:ring-red-500/20': loginForm.get('name')?.touched && loginForm.get('name')?.invalid
               }"
             />
-            <!-- Success Icon -->
             <div *ngIf="loginForm.get('name')?.touched && loginForm.get('name')?.valid" class="absolute inset-y-0 right-0 pr-4 flex items-center">
               <svg class="h-5 w-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
               </svg>
             </div>
           </div>
-          <!-- Error Messages -->
           <div *ngIf="loginForm.get('name')?.touched && loginForm.get('name')?.errors" class="mt-2 text-xs sm:text-sm text-red-400 flex items-start gap-1">
             <svg class="h-4 w-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
@@ -87,20 +89,57 @@
                 'border-red-500 bg-red-500/10 focus:border-red-500 focus:ring-2 focus:ring-red-500/20': loginForm.get('email')?.touched && loginForm.get('email')?.invalid
               }"
             />
-            <!-- Success Icon -->
             <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.valid" class="absolute inset-y-0 right-0 pr-4 flex items-center">
               <svg class="h-5 w-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
               </svg>
             </div>
           </div>
-          <!-- Error Messages -->
           <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors" class="mt-2 text-xs sm:text-sm text-red-400 flex items-start gap-1">
             <svg class="h-4 w-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
             </svg>
             <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</span>
             <span *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+          </div>
+        </div>
+
+        <!-- Password Input -->
+        <div>
+          <label for="password" class="block text-sm font-semibold text-gray-300 mb-2">
+            Password
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+            </div>
+            <input
+              id="password"
+              type="password"
+              formControlName="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              class="w-full pl-12 pr-4 py-3 sm:py-3.5 border rounded-xl text-sm sm:text-base focus:outline-none transition-all duration-200 bg-zinc-800/50 text-white placeholder-gray-500"
+              [ngClass]="{
+                'border-zinc-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20': !loginForm.get('password')?.touched,
+                'border-emerald-500 bg-emerald-500/10 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20': loginForm.get('password')?.touched && loginForm.get('password')?.valid,
+                'border-red-500 bg-red-500/10 focus:border-red-500 focus:ring-2 focus:ring-red-500/20': loginForm.get('password')?.touched && loginForm.get('password')?.invalid
+              }"
+            />
+            <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.valid" class="absolute inset-y-0 right-0 pr-4 flex items-center">
+              <svg class="h-5 w-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+          </div>
+          <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors" class="mt-2 text-xs sm:text-sm text-red-400 flex items-start gap-1">
+            <svg class="h-4 w-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+            </svg>
+            <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</span>
+            <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
           </div>
         </div>
 
@@ -114,7 +153,9 @@
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <span class="text-base sm:text-lg">{{ loading ? 'Signing in...' : 'Continue to Chat' }}</span>
+          <span class="text-base sm:text-lg">
+            {{ loading ? (isLoginMode ? 'Signing in...' : 'Creating account...') : (isLoginMode ? 'Sign In' : 'Create Account') }}
+          </span>
           <svg *ngIf="!loading" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
           </svg>
@@ -133,6 +174,18 @@
           </button>
         </div>
       </form>
+
+      <!-- Toggle Mode -->
+      <div class="text-center mt-6">
+        <button 
+          type="button"
+          (click)="toggleMode()" 
+          class="text-sm text-gray-400 hover:text-blue-400 transition-colors"
+        >
+          {{ isLoginMode ? "Don't have an account? " : "Already have an account? " }}
+          <span class="text-blue-500 font-semibold">{{ isLoginMode ? 'Sign Up' : 'Sign In' }}</span>
+        </button>
+      </div>
 
       <!-- Footer -->
       <div class="text-center mt-8 pt-6 border-t border-zinc-800">

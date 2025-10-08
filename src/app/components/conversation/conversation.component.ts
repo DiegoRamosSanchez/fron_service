@@ -187,7 +187,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
   typeResponse(text: string, userMessage: Message, index: number = 0): void {
     if (index < text.length) {
       userMessage.response += text.charAt(index);
-      setTimeout(() => this.typeResponse(text, userMessage, index + 1), 50);
+      setTimeout(() => this.typeResponse(text, userMessage, index + 1), 20);
     }
   }
 
