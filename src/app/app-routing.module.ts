@@ -7,7 +7,7 @@ import { AuthGuard } from './bunisess/guards/auth.guard';
 
 const routes: Routes = [
   {
-    path: 'auth',
+    path: '',
     component: AuthComponent,
     canActivate: [LoginGuard]
   },
@@ -17,9 +17,8 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: '',
-    redirectTo: '/auth',
-    pathMatch: 'full'
+    path: '**',
+    redirectTo: ''
   }
 ];
 

@@ -49,7 +49,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
 
   loadUserConversations() {
     if (!this.currentUser?.id || this.loading) return;
-    
+
     this.loading = true;
     this.chatService.getUserConversations(this.currentUser.id).subscribe({
       next: (conversations) => {
@@ -60,7 +60,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
             const timeB = b.startTime ? new Date(b.startTime).getTime() : 0;
             return timeB - timeA; // Ordenar por más reciente primero
           });
-        
+
         if (this.conversations.length > 0) {
           this.selectConversation(this.conversations[0]);
         } else {
@@ -146,7 +146,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
         if (response) {
           userMessage.response = '';
           this.typeResponse(response.response, userMessage);
-          
+
           // Actualizar el título de la conversación si se generó
           if (response.conversationId && this.messages.length === 1) {
             this.refreshCurrentConversation();
@@ -193,15 +193,15 @@ export class ConversationComponent implements OnInit, OnDestroy {
 
   deleteConversation(conversation: Conversation, event: Event) {
     event.stopPropagation();
-    
+
     if (!conversation.id || this.loading) return;
-    
+
     if (confirm('¿Estás seguro de eliminar esta conversación?')) {
       this.loading = true;
       this.chatService.logicalDeleteConversation(conversation.id).subscribe({
         next: () => {
           this.conversations = this.conversations.filter(c => c.id !== conversation.id);
-          
+
           if (this.currentConversation?.id === conversation.id) {
             if (this.conversations.length > 0) {
               this.selectConversation(this.conversations[0]);
@@ -209,7 +209,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
               this.startNewConversation();
             }
           }
-          
+
           this.loading = false;
         },
         error: (error) => {
@@ -227,6 +227,6 @@ export class ConversationComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/auth']);
+    this.router.navigate(['/']);
   }
 }
